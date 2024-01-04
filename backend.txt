@@ -1,0 +1,37 @@
+To create a Todo app/Task tracker with the aforementioned requirements using NestJS and MongoDb, the software architecture will involve setting up several components such as modules, controllers, services, and schemas/models. Below is the suggested file structure with the functions that need to be implemented within each file.
+
+1. Tasks Module:
+   - File Path: `src/tasks/tasks.module.ts`
+   - Functions: 
+     - `TasksModule` - The class that encapsulates the module's dependencies.
+
+2. Tasks Controller:
+   - File Path: `src/tasks/tasks.controller.ts`
+   - Functions:
+     - `findAll()` - Get all tasks: Output is an array of tasks.
+     - `findOne(id: string)` - Get a task by ID: Input is the task's ID, output is the task object.
+     - `create(createTaskDto: CreateTaskDto)` - Add a new task: Input is `CreateTaskDto`, output is the created task object.
+     - `remove(id: string)` - Delete a task by ID: Input is the task's ID.
+
+3. Tasks Service:
+   - File Path: `src/tasks/tasks.service.ts`
+   - Functions:
+     - `getAllTasks(): Promise<Task[]>` - Retrieves all tasks from the database.
+     - `getTaskById(id: string): Promise<Task>` - Retrieves a task by its ID from the database.
+     - `addTask(createTaskDto: CreateTaskDto): Promise<Task>` - Adds a new task to the database.
+     - `deleteTask(id: string): Promise<void>` - Deletes a task from the database by its ID.
+
+4. Task Model (Schema):
+   - File Path: `src/tasks/schemas/task.schema.ts`
+   - Functions:
+     - `TaskSchema` - The MongoDB schema for a Task.
+
+5. Task DTOs (Data Transfer Objects):
+   - File Path: `src/tasks/dto/create-task.dto.ts`
+   - Functions:
+     - `CreateTaskDto` class with properties for creating a task.
+
+6. Task Interface (to define the Task object):
+   - File Path: `src/tasks/interfaces/task.interface.ts`
+   - Functions:
+     - An interface that defines the structure of a task object.

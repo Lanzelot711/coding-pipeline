@@ -1,0 +1,74 @@
+To create a Todo app/Task tracker frontend that interacts with a provided backend API, we would utilize a React application that communicates with the backend using HTTP requests. Here is the software architecture plan, including the files paths relative to the `nestproject/source` folder, as well as the function details and their inputs/outputs contained within those files:
+
+### Directory Structure:
+```
+/nestproject/source
+|-- /src
+    |-- /components
+    |   |-- TaskForm.js
+    |   |-- TaskList.js
+    |   |-- Task.js
+    |-- /services
+    |   |-- apiService.js
+    |-- /hooks
+    |   |-- useTasks.js
+    |-- App.js
+    |-- index.js
+```
+
+### File Details:
+
+#### 1. App.js (`/nestproject/source/src/App.js`)
+- Functions:
+  - `App`: The main React component that provides the layout and integrates other components.
+  - Input: N/A
+  - Output: Renders the application interface consisting of `TaskForm` and `TaskList`.
+
+#### 2. index.js (`/nestproject/source/src/index.js`)
+- Functions:
+  - `main`: Entry point that renders the `App` component to the DOM.
+  - Input: N/A
+  - Output: Application mounted to the webpage.
+
+#### 3. TaskForm.js (`/nestproject/source/src/components/TaskForm.js`)
+- Functions:
+  - `TaskForm`: React component for adding a new task.
+  - Input: `onSubmit` callback.
+  - Output: Renders a form that captures task name and deadline, and invokes `onSubmit` when a new task is submitted.
+
+#### 4. TaskList.js (`/nestproject/source/src/components/TaskList.js`)
+- Functions:
+  - `TaskList`: React component that displays a list of tasks.
+  - Input: `tasks` array, `onDelete` and `onRefresh` callbacks.
+  - Output: Renders the list of `Task` components and provides delete functionality.
+
+#### 5. Task.js (`/nestproject/source/src/components/Task.js`)
+- Functions:
+  - `Task`: React component for a single task item.
+  - Input: `task` object, `onDelete` callback.
+  - Output: Renders the task details and a delete button.
+
+#### 6. apiService.js (`/nestproject/source/src/services/apiService.js`)
+- Functions:
+  - `getTasks`: Fetches all tasks from the backend.
+    - Input: N/A
+    - Output: Promise resolving to an array of task entries.
+  - `getTaskById`: Fetches a single task by ID.
+    - Input: `id` (task ID)
+    - Output: Promise resolving to a task entry.
+  - `addTask`: Adds a new task entry.
+    - Input: `task` object with `name` and `deadline` properties.
+    - Output: Promise resolving to the created task entry.
+  - `deleteTask`: Deletes a task entry by ID.
+    - Input: `id` (task ID)
+    - Output: Promise indicating successful deletion.
+
+#### 7. useTasks.js (`/nestproject/source/src/hooks/useTasks.js`)
+- Functions:
+  - `useTasks`: Custom hook that manages task state and interactions with the backend via `apiService`.
+  - Input: N/A
+  - Output: Returns `tasks`, `addTask`, `deleteTask`, and `refreshTasks` functions for managing tasks.
+
+Each of these files would include the necessary imports (e.g., `React`, `useState`, `useEffect` from React; `apiService` from services; components from `components`). The `apiService` would need to be configured to communicate with the backend endpoints provided using Axios, Fetch API, or a similar HTTP client.
+
+Note: The API base URL and endpoints would typically be defined in a config or environment file not listed here; adjust the `apiService` accordingly to point to the correct backend service.

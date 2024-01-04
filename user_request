@@ -1,0 +1,7 @@
+- Todo app/Task tracker
+- stores name and deadline of a task in the database
+- endpoints:
+    - get all entries
+    - delete entry
+    - get entry by id
+    - add entry
