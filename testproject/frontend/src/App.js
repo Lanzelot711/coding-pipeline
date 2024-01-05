@@ -1,14 +1,12 @@
 import React from 'react';
-import TaskForm from './components/TaskForm';
-import TaskList from './components/TaskList';
+import TodoPage from './pages/TodoPage'; // Add the missing import statement for TodoPage
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <TaskForm />
-      <TaskList />
-    </div>
+<div>
+  <TodoPage />
+</div>
   );
-}
+};
 
 export default App;

@@ -1,37 +1,70 @@
 import { useState, useEffect } from 'react';
-import apiService from '../services/apiService';
+import { fetchTasks, fetchTaskById, deleteTask, addTask } from '../utils/api';
 
-function useTasks() {
+export const useTasks = () => {
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    refreshTasks();
+    const loadTasks = async () => {
+      setLoading(true);
+      try {
+        const tasksData = await fetchTasks();
+        setTasks(tasksData);
+        setError(null);
+      } catch (e) {
+        setError(e);
+      }
+      setLoading(false);
+    };
+
+    loadTasks();
   }, []);
 
-  const refreshTasks = () => {
-    apiService.getTasks()
-      .then(setTasks)
-      .catch(error => console.error("Error fetching tasks:", error));
+  const addNewTask = async (task) => {
+    setLoading(true);
+    try {
+      const newTask = await addTask(task);
+      setTasks([...tasks, newTask]);
+      setError(null);
+    } catch (e) {
+      setError(e);
+    }
+    setLoading(false);
   };
 
-  const addTask = (task) => {
-    apiService.addTask(task)
-      .then(newTask => setTasks([...tasks, newTask]))
-      .catch(error => console.error("Error adding task:", error));
+  const getTask = async (taskId) => {
+    setLoading(true);
+    try {
+      const task = await fetchTaskById(taskId);
+      setLoading(false);
+      return task;
+    } catch (e) {
+      setError(e);
+      setLoading(false);
+      return null;
+    }
   };
 
-  const deleteTask = (id) => {
-    apiService.deleteTask(id)
-      .then(() => setTasks(tasks.filter(task => task.id !== id)))
-      .catch(error => console.error("Error deleting task:", error));
+  const removeTask = async (taskId) => {
+    setLoading(true);
+    try {
+      await deleteTask(taskId);
+      setTasks(tasks.filter((task) => task._id !== taskId));
+      setError(null);
+    } catch (e) {
+      setError(e);
+    }
+    setLoading(false);
   };
 
   return {
     tasks,
-    addTask,
-    deleteTask,
-    refreshTasks
+    loading,
+    error,
+    addNewTask,
+    getTask,
+    removeTask,
   };
-}
-
-export default useTasks;
+};

@@ -1,17 +1,20 @@
 import React from 'react';
-import Task from './Task';
+import { useTasks } from '../hooks/useTasks';
+import TaskItem from './TaskItem';
 
-function TaskList({ tasks, onDelete, onRefresh }) {
+const TaskList = () => {
+  const { tasks, removeTask, loading, error } = useTasks();
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading tasks</div>;
+
   return (
     <div>
-      <button onClick={onRefresh}>Refresh Tasks</button>
-      <ul>
-        {tasks.map(task => (
-          <Task key={task.id} task={task} onDelete={onDelete} />
-        ))}
-      </ul>
+      {tasks.map(task => (
+        <TaskItem key={task._id} task={task} deleteTask={removeTask} />
+      ))}
     </div>
   );
-}
+};
 
 export default TaskList;
