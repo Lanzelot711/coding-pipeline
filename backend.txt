@@ -1,37 +1,51 @@
-To create a Todo app/Task tracker with the aforementioned requirements using NestJS and MongoDb, the software architecture will involve setting up several components such as modules, controllers, services, and schemas/models. Below is the suggested file structure with the functions that need to be implemented within each file.
+To create a backend for a Todo app/Task Tracker using NestJS and MongoDB, you would need to set up a NestJS project and create the following files and their respective functions:
 
-1. Tasks Module:
-   - File Path: `src/tasks/tasks.module.ts`
-   - Functions: 
-     - `TasksModule` - The class that encapsulates the module's dependencies.
+1. **Module file (`task.module.ts`)**  
+    - File path: `src/task/task.module.ts`
+    - Imports: `MongooseModule`, `TaskService`, `TaskController`
+    - Description: Defines the `TaskModule` that imports the `MongooseModule.forFeature` to define which models should be registered in the current scope, and associates the `TaskService` and `TaskController` with this module.
 
-2. Tasks Controller:
-   - File Path: `src/tasks/tasks.controller.ts`
-   - Functions:
-     - `findAll()` - Get all tasks: Output is an array of tasks.
-     - `findOne(id: string)` - Get a task by ID: Input is the task's ID, output is the task object.
-     - `create(createTaskDto: CreateTaskDto)` - Add a new task: Input is `CreateTaskDto`, output is the created task object.
-     - `remove(id: string)` - Delete a task by ID: Input is the task's ID.
+2. **Controller file (`task.controller.ts`)**  
+    - File path: `src/task/task.controller.ts`
+    - Imports: `TaskService`, `@Get`, `@Post`, `@Delete`, `@Param`, `@Body`
+    - Functions:
+        - `getAllTasks()`: Retrieve all tasks; no input; output is an array of task instances
+        - `getTaskById(@Param('id') id: string)`: Retrieve a task by its ID; input is the `id` parameter; output is a single task instance
+        - `addTask(@Body() createTaskDto: CreateTaskDto)`: Add a new task; input is a DTO (Data Transfer Object) with task details; output is the created task instance
+        - `deleteTask(@Param('id') id: string)`: Delete a task by its ID; input is the `id` parameter; no output (just a success/failure response)
 
-3. Tasks Service:
-   - File Path: `src/tasks/tasks.service.ts`
-   - Functions:
-     - `getAllTasks(): Promise<Task[]>` - Retrieves all tasks from the database.
-     - `getTaskById(id: string): Promise<Task>` - Retrieves a task by its ID from the database.
-     - `addTask(createTaskDto: CreateTaskDto): Promise<Task>` - Adds a new task to the database.
-     - `deleteTask(id: string): Promise<void>` - Deletes a task from the database by its ID.
+3. **Service file (`task.service.ts`)**  
+    - File path: `src/task/task.service.ts`
+    - Imports: `Injectable`, `Model`, `Task` (Mongoose model), `mongoose`, `NotFoundException`
+    - Functions:
+        - `findAll()`: Fetch all tasks from the database; no input; output is an array of task documents
+        - `findById(id: string)`: Fetch a task by ID from the database; input is the `id`; output is a single task document
+        - `create(createTaskDto: CreateTaskDto)`: Save a new task to the database; input is the task data; output is the created task document
+        - `delete(id: string)`: Remove a task by ID from the database; input is the `id`; no output (just an indication of success/failure)
 
-4. Task Model (Schema):
-   - File Path: `src/tasks/schemas/task.schema.ts`
-   - Functions:
-     - `TaskSchema` - The MongoDB schema for a Task.
+4. **DTO file (`create-task.dto.ts`)**  
+    - File path: `src/task/dto/create-task.dto.ts`
+    - Description: Defines the `CreateTaskDto` class with properties `name: string` and `deadline: Date`. It's a TypeScript class used for data validation and transfer of task data from the client to the server.
 
-5. Task DTOs (Data Transfer Objects):
-   - File Path: `src/tasks/dto/create-task.dto.ts`
-   - Functions:
-     - `CreateTaskDto` class with properties for creating a task.
+5. **Mongoose Schema file (`task.schema.ts`)**  
+    - File path: `src/task/schemas/task.schema.ts`
+    - Imports: `Schema`, `Prop`, `SchemaFactory`, `Document` from `@nestjs/mongoose`
+    - Description: Defines the `TaskSchema` with fields such as `name` and `deadline`. A schema is a structure that defines the shape of documents within a collection.
 
-6. Task Interface (to define the Task object):
-   - File Path: `src/tasks/interfaces/task.interface.ts`
-   - Functions:
-     - An interface that defines the structure of a task object.
+Here's how you could organize the setup and what each file should contain:
+
+- `src/task/task.module.ts`: import `MongooseModule.forFeature([{ name: 'Task', schema: TaskSchema }])` and set up `TaskService` and `TaskController`.
+
+- `src/task/task.controller.ts`: create a RESTful controller with `@Controller('tasks')` decorator and define methods using `@Get()`, `@Post()`, `@Delete(':id')`, and `@Get(':id')`.
+
+- `src/task/task.service.ts`: use the `@Injectable()` decorator for the service. This service should use the `Model` class provided by `mongoose` to interact with the database.
+
+- `src/task/dto/create-task.dto.ts`: create a class `CreateTaskDto` and use decorators for validation, like `@IsNotEmpty()` from `class-validator` package, if necessary.
+
+- `src/task/schemas/task.schema.ts`: define a Mongoose schema that includes the `name` and `deadline` fields, and use `@Schema()` decorator to create a class `Task` that extends `Document`.
+
+You would also need to update your root module to import the `TaskModule` and configure the `MongooseModule` with the connection string to MongoDB:
+
+- `src/app.module.ts`: import `MongooseModule.forRoot('mongodb://rootuser:rootpass@localhost:27017')` and `TaskModule`.
+
+By setting up these files and organizing the code in this way, you can create a clean and maintainable backend structure for your Todo app/Task Tracker.

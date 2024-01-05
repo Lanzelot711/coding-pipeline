@@ -1,14 +1,16 @@
 import React from 'react';
-import TaskForm from './components/TaskForm';
-import TaskList from './components/TaskList';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import TodoPage from './pages/TodoPage';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <TaskForm />
-      <TaskList />
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/" component={TodoPage} />
+        {/* Add more routes here if necessary */}
+      </Switch>
+    </Router>
   );
-}
+};
 
 export default App;

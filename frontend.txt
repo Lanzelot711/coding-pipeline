@@ -1,74 +1,79 @@
-To create a Todo app/Task tracker frontend that interacts with a provided backend API, we would utilize a React application that communicates with the backend using HTTP requests. Here is the software architecture plan, including the files paths relative to the `nestproject/source` folder, as well as the function details and their inputs/outputs contained within those files:
+To implement the necessary frontend components for a Todo app/Task tracker with the described functionality, we will use the latest version of React that supports hooks and function components. Below is the architectural plan for the React frontend:
 
-### Directory Structure:
-```
-/nestproject/source
-|-- /src
-    |-- /components
-    |   |-- TaskForm.js
-    |   |-- TaskList.js
-    |   |-- Task.js
-    |-- /services
-    |   |-- apiService.js
-    |-- /hooks
-    |   |-- useTasks.js
-    |-- App.js
-    |-- index.js
-```
+1. **Setup project structure:**
+   - Create a new React project using `create-react-app` or similar tooling.
+   - Organize your project with the following folder structure:
+     ```
+     /nestproject
+       /src
+         /components
+         /services
+         /hooks
+         /utils
+         /pages
+       /public
+     ```
 
-### File Details:
+2. **Create utility functions for API calls:**
+   - File path: `/src/utils/api.js`
+   - Functions:
+     - `fetchTasks`: GET all entries
+       - Input: none
+       - Output: List of tasks
+       - Imports: Axios or fetch API for making HTTP requests
+     - `deleteTask`: DELETE entry by id
+       - Input: taskId
+       - Output: Confirmation of deletion
+     - `fetchTaskById`: GET entry by id
+       - Input: taskId
+       - Output: Single task detail
+     - `addTask`: POST new task entry
+       - Input: Task object with `name` and `deadline`
+       - Output: Newly created task
 
-#### 1. App.js (`/nestproject/source/src/App.js`)
-- Functions:
-  - `App`: The main React component that provides the layout and integrates other components.
-  - Input: N/A
-  - Output: Renders the application interface consisting of `TaskForm` and `TaskList`.
+3. **Create custom hooks for data fetching:**
+   - File path: `/src/hooks/useTasks.js`
+   - Hook: `useTasks`
+     - Purpose: To fetch tasks from the backend and provide add, delete, and get functionality
 
-#### 2. index.js (`/nestproject/source/src/index.js`)
-- Functions:
-  - `main`: Entry point that renders the `App` component to the DOM.
-  - Input: N/A
-  - Output: Application mounted to the webpage.
+4. **Create the main components:**
+   - TaskList Component:
+     - File path: `/src/components/TaskList.js`
+     - Function: Renders a list of tasks
+     - Imports: `useTasks` hook, TaskItem component
 
-#### 3. TaskForm.js (`/nestproject/source/src/components/TaskForm.js`)
-- Functions:
-  - `TaskForm`: React component for adding a new task.
-  - Input: `onSubmit` callback.
-  - Output: Renders a form that captures task name and deadline, and invokes `onSubmit` when a new task is submitted.
+   - TaskItem Component:
+     - File path: `/src/components/TaskItem.js`
+     - Function: Renders individual task details with an option to delete
+     - Imports: `useTasks` hook
 
-#### 4. TaskList.js (`/nestproject/source/src/components/TaskList.js`)
-- Functions:
-  - `TaskList`: React component that displays a list of tasks.
-  - Input: `tasks` array, `onDelete` and `onRefresh` callbacks.
-  - Output: Renders the list of `Task` components and provides delete functionality.
+   - AddTaskForm Component:
+     - File path: `/src/components/AddTaskForm.js`
+     - Function: Provides a form to enter task name and deadline, then submits new task
+     - Inputs: Task name, Task deadline
 
-#### 5. Task.js (`/nestproject/source/src/components/Task.js`)
-- Functions:
-  - `Task`: React component for a single task item.
-  - Input: `task` object, `onDelete` callback.
-  - Output: Renders the task details and a delete button.
+   - Layout Component (optional for UI structure):
+     - File path: `/src/components/Layout.js`
+     - Function: Defines the page layout where other components are rendered
 
-#### 6. apiService.js (`/nestproject/source/src/services/apiService.js`)
-- Functions:
-  - `getTasks`: Fetches all tasks from the backend.
-    - Input: N/A
-    - Output: Promise resolving to an array of task entries.
-  - `getTaskById`: Fetches a single task by ID.
-    - Input: `id` (task ID)
-    - Output: Promise resolving to a task entry.
-  - `addTask`: Adds a new task entry.
-    - Input: `task` object with `name` and `deadline` properties.
-    - Output: Promise resolving to the created task entry.
-  - `deleteTask`: Deletes a task entry by ID.
-    - Input: `id` (task ID)
-    - Output: Promise indicating successful deletion.
+5. **Create the main page:**
+   - File path: `/src/pages/TodoPage.js`
+   - Function: Combines TaskList and AddTaskForm components
+   - Imports: TaskList, AddTaskForm, Layout components
 
-#### 7. useTasks.js (`/nestproject/source/src/hooks/useTasks.js`)
-- Functions:
-  - `useTasks`: Custom hook that manages task state and interactions with the backend via `apiService`.
-  - Input: N/A
-  - Output: Returns `tasks`, `addTask`, `deleteTask`, and `refreshTasks` functions for managing tasks.
+6. **Create the App entry point:**
+   - File path: `/src/App.js`
+   - Function: Mounts the main TodoPage and any routing if necessary
+   
+7. **Set up routing (if required):**
+   - If the application is a single-page app, you may not need a router.
+   - If multiple pages are required, use React Router.
+   - File path: `/src/App.js` (or create a separate `/src/routes.js` file)
+   - Imports: BrowserRouter and Route from 'react-router-dom', TodoPage component
 
-Each of these files would include the necessary imports (e.g., `React`, `useState`, `useEffect` from React; `apiService` from services; components from `components`). The `apiService` would need to be configured to communicate with the backend endpoints provided using Axios, Fetch API, or a similar HTTP client.
+8. **Add Global State Management (if necessary):**
+   - For larger applications or for those needing more complex state handling, consider using Context API or Redux for state management.
 
-Note: The API base URL and endpoints would typically be defined in a config or environment file not listed here; adjust the `apiService` accordingly to point to the correct backend service.
+Each of the above components, hooks, and services would need to handle the edge cases such as error handling, loading states, and updating the UI reactively. Depending on the user requirement for the backend server URL, you may also need to set up environment variables to store the API endpoints.
+
+Please remember that this is a high-level plan, in an actual implementation, you would need to refine each component, hooks, and service, fleshing out the specifics such as parameters, structure of the task objects, error handling, form validation, and adding style/CSS for UI components.

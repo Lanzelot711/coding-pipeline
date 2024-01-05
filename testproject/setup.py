@@ -21,8 +21,8 @@ def setup_frontend():
     # Create React app
     run_command('npx create-react-app frontend')
 
-    # Change to front-end directory
-    os.chdir('front-end')
+    # Change to frontend directory
+    os.chdir('frontend')
 
     # Install Tailwind CSS
     run_command('npm install -D tailwindcss')
